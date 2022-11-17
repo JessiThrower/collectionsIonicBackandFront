@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>my-boardgames</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let g of boardgame">
+      <ion-label>
+        <h1>Name: {{g.name}}</h1>
+        <p>Type: {{g.type}}</p>
+        <p>Company: {{g.company}}</p>
+        <p>Players: {{g.players}}</p>
+        <p>Description: {{g.description}}</p>
+        <p>Year: {{g.year}}</p>
+      </ion-label>
+
+      <div class="item-note" item-end>
+        <button ion-button clear [routerLink]="['/update/', boardgame.id]">
+          <ion-icon name="create" style="zoom:1.5"></ion-icon>
+        </button>
+        <button ion-button clear (click)="removeBoardgame(boardgame)">
+          <ion-icon name="trash" style="zoom:1.5"></ion-icon>
+        </button>
+      </div>
+
+    </ion-item>
+  </ion-list>
+</ion-content>
