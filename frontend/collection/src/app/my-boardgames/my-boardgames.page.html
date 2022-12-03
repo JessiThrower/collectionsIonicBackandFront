@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>my-boardgames</ion-title>
+    <ion-title>My Boardgames List</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -8,19 +8,20 @@
   <ion-list>
     <ion-item *ngFor="let g of boardgame">
       <ion-label>
-        <h1>Name: {{g.name}}</h1>
-        <p>Type: {{g.type}}</p>
-        <p>Company: {{g.company}}</p>
-        <p>Players: {{g.players}}</p>
-        <p>Description: {{g.description}}</p>
-        <p>Year: {{g.year}}</p>
+        <input type="hidden" value="{{g.id}}"/>
+        <h2>Name: {{g.name}}</h2>
+        <h3>Type: {{g.type}}</h3>
+        <h3>Company: {{g.company}}</h3>
+        <h3>Players: {{g.players}}</h3>
+        <h3>Description: {{g.description}}</h3>
+        <h3>Year: {{g.year}}</h3>
       </ion-label>
 
       <div class="item-note" item-end>
-        <button ion-button clear [routerLink]="['/update/', boardgame.id]">
+        <button ion-button clear [routerLink]="['/updateboardgame/', g.id]">
           <ion-icon name="create" style="zoom:1.5"></ion-icon>
         </button>
-        <button ion-button clear (click)="removeBoardgame(boardgame)">
+        <button ion-button clear (click)="removeBoardgame(g.id)">
           <ion-icon name="trash" style="zoom:1.5"></ion-icon>
         </button>
       </div>

@@ -2,47 +2,46 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { Boardgame } from '../model/boardgame';
 
-export class Boardgame {
-  _id: number;
-  name: string;
-  type: string;
-  company: string;
-  players: number;
-  description: string;
-  year: number;
-}
+const httpOptionsUsingUrlEncoded = {
+  headers: new HttpHeaders({ 'Content-type': "application/x-www-form-urlencoded"})
+};
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class BoardgameService {
 
   endpoint = 'http://localhost:8080/boardgame';
-
-  httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-  };
-
-  httpOptionsUsingUrlEncoded = {
-    headers: new HttpHeaders({ 'Content-type': "aplication/x-www-form-urlencoded"})
-  };
+ 
 
   constructor(private httpClient: HttpClient) { }
 
-  createBoardgame(boardgame: Boardgame): Observable<Boardgame> {
+  createBoardgame(boardgame: Boardgame): Observable<any> {
     console.log('create boardgame');
     console.log(JSON.stringify(boardgame));
-    return this.httpClient.post<Boardgame>(this.endpoint, JSON.stringify(boardgame), this.httpOptions).pipe(
+
+    let bodyEncoded = new URLSearchParams();
+    bodyEncoded.append("name", boardgame.name);
+    bodyEncoded.append("type", boardgame.type);
+    bodyEncoded.append("company", boardgame.company);
+    bodyEncoded.append("players", boardgame.players.toString());
+    bodyEncoded.append("description", boardgame.description);
+    bodyEncoded.append("year", boardgame.year.toString());
+    
+    
+    return this.httpClient.post<Boardgame>(this.endpoint, bodyEncoded, httpOptionsUsingUrlEncoded).pipe(
       catchError(this.handleError<Boardgame>('Error occured'))
     );
   }
 
-  getBoardgame(_id): Observable<Boardgame[]>{
-    return this.httpClient.get<Boardgame[]>(this.endpoint + '/' + _id).pipe(
-      tap(_ => console.log('Boardgame fetched: ${_id}')), 
-      catchError(this.handleError<Boardgame[]>('Get boardgame id=${id}'))
-    )
+  getBoardgame(id: number): Observable<Boardgame>{
+    return this.httpClient.get<Boardgame>(this.endpoint + '/' + id).pipe(
+      tap(_ => console.log('Boardgame fetched: ${id}')), 
+      catchError(this.handleError<Boardgame>('Get boardgame id=${id}'))
+    );
   }
 
   getBoardGames(): Observable<Boardgame[]> {
@@ -52,17 +51,27 @@ export class BoardgameService {
     );
   }
 
-  updateBoardgame(_id, boardgame: Boardgame): Observable<any> {
-    return this.httpClient.put(this.endpoint + '/' + _id, JSON.stringify(boardgame), this.httpOptions).pipe(
-      tap(_ => console.log('Boardgame updated: ${_id}')),
-      catchError(this.handleError<Boardgame[]>('Update boardgame'))
+  updateBoardgame(id: number, boardgame: Boardgame): Observable<any> {
+    let bodyEncoded = new URLSearchParams();
+    bodyEncoded.append("id", id.toString());
+    bodyEncoded.append("name", boardgame.name);
+    bodyEncoded.append("type", boardgame.type);
+    bodyEncoded.append("company", boardgame.company);
+    bodyEncoded.append("players", boardgame.players.toString());
+    bodyEncoded.append("description", boardgame.description);
+    bodyEncoded.append("year", boardgame.year.toString());
+    
+
+    return this.httpClient.put(this.endpoint + '/' + id, bodyEncoded, httpOptionsUsingUrlEncoded).pipe(
+      tap(_ => console.log('Boardgame updated: ${id}')),
+      catchError(this.handleError<any>('Update boardgame'))
     );
   }
 
-  deleteBoardgame(_id): Observable<Boardgame[]> {
-    return this.httpClient.delete<Boardgame[]>(this.endpoint + '/' + _id, this.httpOptions).pipe(
-      tap(_ => console.log('Boardgame deleted: ${_id}')),
-      catchError(this.handleError<Boardgame[]>('Delete boardgame'))
+  deleteBoardgame(id: number): Observable<any> {
+    return this.httpClient.delete(this.endpoint + '/' + id).pipe(
+      tap(_ => console.log('Boardgame deleted: ${id}')),
+      catchError(this.handleError<any>('Delete boardgame'))
     );
   }
 

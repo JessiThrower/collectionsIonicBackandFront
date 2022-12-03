@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder } from '@angular/forms';
@@ -18,7 +18,8 @@ export class UpdateboardgamePage implements OnInit {
     private boardgameService: BoardgameService,
     private activatedRoute: ActivatedRoute,
     public formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private zone: NgZone
   ) { 
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
   }
@@ -26,18 +27,18 @@ export class UpdateboardgamePage implements OnInit {
   ngOnInit() {
     this.fetchBoardgame(this.id);
     this.updateBoardgameFg = this.formBuilder.group({
-      name: [' '],
-      type: [' '],
-      company: [' '],
-      players: [ ],
-      description: [' '],
-      year: [ ]
+      name: [''],
+      type: [''],
+      company: [''],
+      players: [''],
+      description: [''],
+      year: ['']
 
     })
   }
 
-  fetchBoardgame(_id){
-    this.boardgameService.getBoardgame(_id).subscribe((data) => {
+  fetchBoardgame(id){
+    this.boardgameService.getBoardgame(id).subscribe((data) => {
       this.updateBoardgameFg.setValue({
         name: data['name'],
         type: data['type'],
@@ -53,10 +54,15 @@ export class UpdateboardgamePage implements OnInit {
     if(!this.updateBoardgameFg.valid) {
       return false;
     } else {
-      this.boardgameService.updateBoardgame(this.id, this.updateBoardgameFg.value).subscribe(() => {
-        this.updateBoardgameFg.reset();
-        this.router.navigate(['/my-boardgames']);
-      })
+
+      this.boardgameService.updateBoardgame(this.id, this.updateBoardgameFg.value).subscribe(
+        (response) => {
+        this.zone.run(()=> {
+          this.updateBoardgameFg.reset();
+          this.router.navigate(['/my-boardgames']);
+        })
+
+      });
     }
   }
 

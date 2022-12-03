@@ -22,7 +22,7 @@ const routes: Routes = [
   {
     path: 'updateboardgame/:id',
     loadChildren: () => import('./updateboardgame/updateboardgame.module').then( m => m.UpdateboardgamePageModule)
-  },
+  }
 ];
 
 @NgModule({
