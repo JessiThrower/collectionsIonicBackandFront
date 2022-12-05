@@ -3,6 +3,7 @@ package com.jessica.collections.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import com.jessica.collections.entity.models.BoardGame;
 import com.jessica.collections.entity.services.IBoardGameService;
 
 @RestController
+@CrossOrigin(origins = "*")
 public class BoardGameController {
 	
 	@Autowired
@@ -30,7 +32,7 @@ public class BoardGameController {
 	}
 	
 	@PostMapping("/boardgame")
-	public void post (BoardGame boardGame) {
+	public void post(BoardGame boardGame) {
 		boardGameService.post(boardGame);
 	}
 	

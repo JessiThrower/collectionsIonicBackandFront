@@ -18,12 +18,12 @@ public class BoardGame implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	private String type;
 	private String name;
+	private String type;	
 	private String company;
-	private int players;	
+	private Integer players;	
 	private String description;
-	private int year;
+	private Integer year;
 	
 	public long getId() {
 		return id;
@@ -49,16 +49,16 @@ public class BoardGame implements Serializable {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public int getPlayers() {
+	public Integer getPlayers() {
 		return players;
 	}
-	public void setPlayers(int players) {
+	public void setPlayers(Integer players) {
 		this.players = players;
 	}
-	public int getYear() {
+	public Integer getYear() {
 		return year;
 	}
-	public void setYear(int year) {
+	public void setYear(Integer year) {
 		this.year = year;
 	}
 	public String getDescription() {
@@ -68,11 +68,11 @@ public class BoardGame implements Serializable {
 		this.description = description;
 	}	
 		
-	public BoardGame(String type, String name, String company, int players,
+	public BoardGame(String name, String type, String company, int players,
 			String description, int year) {
 		super();
-		this.type = type;
 		this.name = name;
+		this.type = type;
 		this.company = company;
 		this.players = players;
 		this.description = description;
